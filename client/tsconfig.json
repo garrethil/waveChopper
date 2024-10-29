@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "jsx": "react", // Enables JSX support for React components
+    "types": ["node", "dom"], // Includes types for both Node.js and the browser
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*.ts", // Include all TypeScript files in src
+    "src/**/*.tsx" // Include React components if using JSX/TSX
+  ],
+  "exclude": ["node_modules", "dist"]
+}
