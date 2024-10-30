@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 dotenv.config();
 
 const connectionString: string =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/mydatabase";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/wavchopper";
 
 mongoose.connect(connectionString, {
   useNewUrlParser: true,

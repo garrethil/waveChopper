@@ -29,7 +29,7 @@ db.once("open", () => {
     console.log(`Server is listening on http://localhost:${PORT}`);
     console.log(
       "Connected to MongoDB at:",
-      process.env.MONGODB_URI || "mongodb://localhost:27017/mydatabase"
+      process.env.MONGODB_URI || "mongodb://localhost:27017/wavchopper"
     );
   });
 });
