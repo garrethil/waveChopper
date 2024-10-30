@@ -6,6 +6,7 @@ interface IUser extends Document {
   email: string;
   passwordHash: string;
   creations: Types.ObjectId[];
+  comparePassword(password: string): Promise<boolean>;
 }
 
 // Use interface in Schema
