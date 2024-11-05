@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import path from "path";
+import routes from "./routes";
 import db from "./config/connection";
 
 dotenv.config();
@@ -11,6 +12,8 @@ const PORT = process.env.PORT || 3001;
 //middlewear to parse json and urlencoded data
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use("/api", routes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to WaveChopper");
