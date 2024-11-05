@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
+import bcrypt from "bcrypt";
 
 // Define TypeScript interface
 interface IUser extends Document {
@@ -27,6 +28,13 @@ const userSchema = new Schema<IUser>({
     },
   ],
 });
+
+// Add the comparePassword method to the schema
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return await bcrypt.compare(password, this.passwordHash);
+};
 
 const User = mongoose.model<IUser>("User", userSchema);
 
