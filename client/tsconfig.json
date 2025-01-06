@@ -1,18 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",
-    "jsx": "react", // Enables JSX support for React components
-    "types": ["node", "dom"], // Includes types for both Node.js and the browser
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "target": "esnext", // Modern JavaScript features
+    "module": "esnext", // ESNext modules for bundlers like Vite or Webpack
+    "lib": ["dom", "esnext"], // Include DOM and modern JavaScript libraries
+    "strict": true, // Enable all strict type-checking options
+    "esModuleInterop": true, // Support CommonJS default imports
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "jsx": "react", // If using React, specify JSX support
+    "outDir": "./dist" // Output directory for compiled files
   },
-  "include": [
-    "src/**/*.ts", // Include all TypeScript files in src
-    "src/**/*.tsx" // Include React components if using JSX/TSX
-  ],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"], // Include all .ts and .tsx files in the src directory
+  "exclude": ["node_modules", "dist"] // Exclude unnecessary directories
 }
