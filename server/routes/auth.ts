@@ -1,133 +1,87 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
 const router = express.Router();
 
+interface AuthRequestBody {
+  email: string;
+  password: string;
+}
+
 // Register route
-router.post("/auth/register", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
-    // ** Get The User Data From Body ;
-    const user = req.body;
+    const { email, password } = req.body as AuthRequestBody;
 
-    // ** destructure the information from user;
-    const { email, password } = user;
+    const isEmailAlreadyExist = await User.findOne({ email });
 
-    // ** Check the email all ready exist  in database or not ;
-    // ** Import the user model from "./models/user";
-
-    const isEmailAllReadyExist = await User.findOne({
-      email: email,
-    });
-
-    // ** Add a condition if the user exist we will send the response as email all ready exist
-    if (isEmailAllReadyExist) {
-      res.status(400).json({
+    if (isEmailAlreadyExist) {
+      return res.status(400).json({
         status: 400,
-        message: "Email all ready in use",
+        message: "Email already in use",
       });
-      return;
     }
 
-    // ** if not create a new user ;
-    // !! Don't save the password as plain text in db . I am saving just for demonstration.
-    // ** You can use bcrypt to hash the plain password.
+    const newUser = await User.create({ email, password });
 
-    // now create the user;
-    const newUser = await User.create({
-      email,
-      password,
-    });
-
-    // Send the newUser as  response;
-    res.status(200).json({
+    res.status(201).json({
       status: 201,
       success: true,
-      message: " User created Successfully",
+      message: "User created successfully",
+      user: { id: newUser._id, email: newUser.email },
     });
   } catch (error: any) {
-    // console the error to debug
-    console.log(error);
-
-    // Send the error message to the client
+    console.error(error);
     res.status(400).json({
       status: 400,
-      message: error.message.toString(),
+      message: error.message,
     });
   }
 });
 
-router.post("/auth/login", async (req, res) => {
+// Login route
+router.post("/login", async (req, res) => {
   try {
-    // ** Get The User Data From Body ;
-    const user = req.body;
+    const { email, password } = req.body as AuthRequestBody;
 
-    // ** destructure the information from user;
-    const { email, password } = user;
+    const user = await User.findOne({ email });
 
-    // ** Check the (email/user) exist  in database or not ;
-    const isUserExist = await User.findOne({
-      email: email,
-    });
-
-    // ** if there is not any user we will send user not found;
-    if (!isUserExist) {
-      res.status(404).json({
+    if (!user) {
+      return res.status(404).json({
         status: 404,
         success: false,
         message: "User not found",
       });
-      return;
     }
 
-    // ** if the (user) exist  in database we will check the password is valid or not ;
-    // **  compare the password in db and the password sended in the request body
-
-    const isPasswordMatched = isUserExist?.password === password;
-
-    // ** if not matched send response that wrong password;
+    const isPasswordMatched = await user.comparePassword(password);
 
     if (!isPasswordMatched) {
-      res.status(400).json({
+      return res.status(400).json({
         status: 400,
         success: false,
-        message: "wrong password",
+        message: "Wrong password",
       });
-      return;
     }
 
-    // ** if the email and password is valid create a token
-
-    /*
-    To create a token JsonWebToken (JWT) receive's 3 parameter
-    1. Payload -  This contains the claims or data you want to include in the token.
-    2. Secret Key - A secure key known only to the server used for signing the token.
-    3. expiration -  Additional settings like token expiration or algorithm selection.
-    */
-
-    // !! Don't Provide the secret openly, keep it in the .env file. I am Keeping Open just for demonstration
-
-    // ** This is our JWT Token
     const token = jwt.sign(
-      { _id: isUserExist?._id, email: isUserExist?.email },
+      { _id: user._id, email: user.email },
       process.env.JWT_SECRET as string,
-      {
-        expiresIn: "1d",
-      }
+      { expiresIn: "1d" }
     );
 
-    // send the response
     res.status(200).json({
       status: 200,
       success: true,
-      message: "login success",
-      token: token,
+      message: "Login successful",
+      token,
     });
   } catch (error: any) {
-    // Send the error message to the client
+    console.error(error);
     res.status(400).json({
       status: 400,
-      message: error.message.toString(),
+      message: error.message,
     });
   }
 });
