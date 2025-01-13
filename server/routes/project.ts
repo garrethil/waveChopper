@@ -1,9 +1,9 @@
-import { Router, Request, Response } from "express";
+import express from "express";
 import multer from "multer";
 import AWS from "aws-sdk";
-import { User } from "../models/User";
+import { authenticateToken } from "../middleware/authenticateToken";
 
-const router = Router();
+const router = express.Router();
 const upload = multer();
 
 // AWS S3 configuration
@@ -13,20 +13,13 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION!,
 });
 
-// Interface for the request body
-interface UploadRequest extends Request {
-  file?: Express.Multer.File; // Make file optional
-  body: {
-    userId: string;
-  };
-}
-
-// File upload route
+// Protected upload route
 router.post(
   "/upload",
+  authenticateToken,
   upload.single("file"),
-  async (req: UploadRequest, res: Response) => {
-    const { userId } = req.body;
+  async (req, res) => {
+    const { userId } = req.body; // Extracted authenticateToken middleware
     const file = req.file;
 
     if (!userId || !file) {
@@ -34,16 +27,10 @@ router.post(
     }
 
     try {
-      // Verify the user exists in the database
-      const user = await User.findById(userId);
-      if (!user) {
-        return res.status(404).json({ error: "User not found." });
-      }
-
       // Upload file to S3 under user's folder
       const uploadParams: AWS.S3.PutObjectRequest = {
         Bucket: process.env.S3_BUCKET_NAME!,
-        Key: `${userId}/${file.originalname}`, // Path: userID/filename
+        Key: `${userId}/${file.originalname}`,
         Body: file.buffer,
         ContentType: file.mimetype,
       };
