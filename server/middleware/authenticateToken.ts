@@ -6,20 +6,40 @@ interface JwtPayload {
   email: string;
 }
 
-// Middleware to authenticate the token
-export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Extract Bearer token
+declare global {
+  namespace Express {
+    interface Request {
+      user?: { id: string; email: string };
+    }
+  }
+}
 
-  if (!token) {
-    return res.status(401).json({ error: "Access token is missing or invalid." });
+export const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res
+      .status(401)
+      .json({ error: "Authorization header is missing or invalid." });
   }
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
+  const token = authHeader.split(" ")[1];
 
-    // Attach user ID and email to request body
-    req.body.userId = decoded._id;
-    req.body.email = decoded.email;
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as JwtPayload;
+
+    // Attach user information to req.user
+    req.user = {
+      id: decoded._id,
+      email: decoded.email,
+    };
 
     next(); // Proceed to the next middleware/route handler
   } catch (error) {

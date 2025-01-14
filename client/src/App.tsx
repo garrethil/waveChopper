@@ -34,13 +34,16 @@ const App: React.FC = () => {
     formData.append("file", selectedFile);
 
     try {
-      const response = await fetch("/upload", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost:8000/api/projects/upload",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to upload file.");
@@ -98,6 +101,12 @@ const App: React.FC = () => {
       });
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("authToken"); // Remove the token
+    setIsLoggedIn(false); // Update state
+    alert("You have been logged out.");
+  };
+
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
@@ -119,9 +128,15 @@ const App: React.FC = () => {
           </>
         ) : (
           <>
-            <h1 className="text-2xl font-bold text-center mb-4">
-              Upload WAV File
-            </h1>
+            <div className="flex justify-between items-center mb-4">
+              <h1 className="text-2xl font-bold">Upload WAV File</h1>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white font-semibold px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+              >
+                Log Out
+              </button>
+            </div>
             <p className="text-gray-600 text-center mb-6">
               Select a .wav file to upload and manipulate.
             </p>
