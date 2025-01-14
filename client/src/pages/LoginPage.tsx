@@ -4,26 +4,41 @@ import AuthModal from "../components/AuthModal";
 const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  const handleLogin = (email: string, password: string) => {
-    fetch("http://localhost:8000/api/auth/login", {
+  const handleAuth = (endpoint: string, email: string, password: string) => {
+    fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.token) {
-          localStorage.setItem("authToken", data.token);
-          onLogin();
+      .then((res) => res.json().then((data) => ({ data, ok: res.ok })))
+      .then(({ data, ok }) => {
+        if (ok) {
+          if (endpoint.includes("login")) {
+            // Handle successful login
+            localStorage.setItem("authToken", data.token);
+            onLogin(); // Update parent state
+            alert("Login successful!");
+          } else {
+            // Handle successful signup
+            alert("Signup successful! Please log in.");
+          }
           setShowAuthModal(false);
         } else {
-          alert(data.message || "Login failed.");
+          alert(data.message || "An error occurred.");
         }
       })
       .catch((error) => {
-        console.error("Login error:", error);
-        alert("Error logging in. Please try again.");
+        console.error("Error during authentication:", error);
+        alert("An error occurred. Please try again.");
       });
+  };
+
+  const handleLogin = (email: string, password: string) => {
+    handleAuth("http://localhost:8000/api/auth/login", email, password);
+  };
+
+  const handleSignup = (email: string, password: string) => {
+    handleAuth("http://localhost:8000/api/auth/register", email, password);
   };
 
   return (
@@ -38,7 +53,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
         <AuthModal
           onClose={() => setShowAuthModal(false)}
           onLogin={handleLogin}
-          onSignup={() => {}}
+          onSignup={handleSignup}
         />
       )}
     </div>

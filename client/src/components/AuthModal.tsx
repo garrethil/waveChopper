@@ -3,24 +3,46 @@ import React, { useState } from "react";
 interface AuthModalProps {
   onClose: () => void;
   onLogin: (email: string, password: string) => void;
-  onSignup: (email: string, password: string) => void;
+  onSignup: (email: string, password: string) => void; // Add this line
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({
-  onClose,
-  onLogin,
-  onSignup,
-}) => {
-  const [isLogin, setIsLogin] = useState(true);
+const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
+  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Signup
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleAuth = (event: React.FormEvent) => {
+  const handleAuth = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (isLogin) {
-      onLogin(email, password);
-    } else {
-      onSignup(email, password);
+    const endpoint = isLogin
+      ? "http://localhost:8000/api/auth/login"
+      : "http://localhost:8000/api/auth/register";
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (isLogin) {
+          // Login success
+          localStorage.setItem("authToken", data.token);
+          onLogin(email, password); // Pass email and password to the parent onLogin function
+          alert("Login successful!");
+        } else {
+          // Signup success
+          alert("Signup successful! Please log in.");
+        }
+        onClose();
+      } else {
+        alert(data.message || "An error occurred.");
+      }
+    } catch (error) {
+      console.error("Error during authentication:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 

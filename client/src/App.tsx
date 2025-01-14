@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import {
   BrowserRouter as Router,
-  Routes,
   Route,
-  Navigate,
+  Switch,
+  Redirect,
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import UploadPage from "./pages/UploadPage";
@@ -13,7 +13,10 @@ const App: React.FC = () => {
     !!localStorage.getItem("authToken")
   );
 
-  const handleLogin = () => setIsLoggedIn(true);
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     setIsLoggedIn(false);
@@ -21,28 +24,35 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <Routes>
+      <Switch>
+        {/* Login Route */}
         <Route
           path="/"
-          element={
+          exact
+          render={() =>
             isLoggedIn ? (
-              <Navigate to="/upload" />
+              <Redirect to="/upload" />
             ) : (
               <LoginPage onLogin={handleLogin} />
             )
           }
         />
+
+        {/* Upload Route */}
         <Route
           path="/upload"
-          element={
+          render={() =>
             isLoggedIn ? (
               <UploadPage onLogout={handleLogout} />
             ) : (
-              <Navigate to="/" />
+              <Redirect to="/" />
             )
           }
         />
-      </Routes>
+
+        {/* Fallback for undefined routes */}
+        <Redirect to="/" />
+      </Switch>
     </Router>
   );
 };
