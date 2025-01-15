@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import UploadPage from "./pages/UploadPage";
+import ProjectDisplayPage from "./pages/ProjectDisplayPage";
+import HomePage from "./pages/HomePage";
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -31,7 +33,7 @@ const App: React.FC = () => {
           exact
           render={() =>
             isLoggedIn ? (
-              <Redirect to="/upload" />
+              <HomePage onLogout={handleLogout} />
             ) : (
               <LoginPage onLogin={handleLogin} />
             )
@@ -47,6 +49,14 @@ const App: React.FC = () => {
             ) : (
               <Redirect to="/" />
             )
+          }
+        />
+
+        {/* Project Display Route */}
+        <Route
+          path="/projects"
+          render={() =>
+            isLoggedIn ? <ProjectDisplayPage /> : <Redirect to="/" />
           }
         />
 
