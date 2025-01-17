@@ -70,7 +70,6 @@ router.get("/user-files", authenticateToken, async (req, res) => {
     };
 
     const data = await s3.listObjectsV2(params).promise();
-    console.log("S3 Response:", data); // Debugging log
 
     if (!data.Contents || data.Contents.length === 0) {
       return res
