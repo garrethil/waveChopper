@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "lib": ["esnext"],
-    "types": ["node"], // Specify both Node.js and DOM types
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",
-    "skipLibCheck": true
+    "target": "esnext", // Specify the ECMAScript target version
+    "module": "commonjs", // Use CommonJS for module resolution
+    "lib": ["esnext"], // Include modern ECMAScript library features
+    "types": ["node"], // Include Node.js type definitions
+    "moduleResolution": "node", // Resolve modules using Node.js module resolution logic
+    "strict": true, // Enable all strict type-checking options
+    "esModuleInterop": true, // Enable compatibility for CommonJS and ES modules
+    "outDir": "./dist", // Output directory for compiled files
+    "skipLibCheck": true, // Skip type checking of all declaration files
+    "typeRoots": ["./node_modules/@types", "./@types"] // Specify the type definitions directories
   },
-  "include": ["./**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["./**/*.ts"], // Include all TypeScript files in the src folder
+  "exclude": ["node_modules", "dist"] // Exclude the node_modules and dist folders
 }

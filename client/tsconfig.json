@@ -9,6 +9,6 @@
     "jsx": "react", // If using React, specify JSX support
     "outDir": "./dist" // Output directory for compiled files
   },
-  "include": ["src/**/*"], // Include all .ts and .tsx files in the src directory
+  "include": ["src/**/*", "../server/@types"], // Include all .ts and .tsx files in the src directory
   "exclude": ["node_modules", "dist"] // Exclude unnecessary directories
 }
