@@ -12,6 +12,7 @@ const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   region: process.env.AWS_REGION!,
+  signatureVersion: "v4",
 });
 
 router.post(
@@ -120,15 +121,22 @@ router.get("/user-files", authenticateToken, async (req, res) => {
         groupedProjects[projectName] = {};
       }
 
+      // Generate a signed URL for each file
+      const signedUrl = s3.getSignedUrl("getObject", {
+        Bucket: process.env.S3_BUCKET_NAME!,
+        Key: file.Key!,
+        Expires: 3600, // URL valid for 1 hour
+      });
+
       if (file.Key!.includes("manipulated")) {
         groupedProjects[projectName].manipulatedFile = {
           key: file.Key,
-          url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.Key}`,
+          url: signedUrl,
         };
       } else {
         groupedProjects[projectName].originalFile = {
           key: file.Key,
-          url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.Key}`,
+          url: signedUrl,
         };
       }
     }
