@@ -15,9 +15,6 @@ export const decodeAudio = async (buffer: Buffer) => {
       sampleRate: (wav.fmt as any).sampleRate,
       channelData: wav.getSamples(true, Int16Array),
     };
-
-    console.log("Decoded Audio Data:", audioData);
-
     return audioData;
   } catch (error) {
     console.error("Error during decodeAudio:", error);

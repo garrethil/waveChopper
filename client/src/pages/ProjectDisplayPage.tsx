@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Project from "../components/Project";
 
-// Define the type for a project
+// Define types for the API response
 interface Project {
-  key: string;
-  lastModified: string;
-  size: number;
-  url: string;
+  name: string;
+  originalFile?: { key: string; url: string };
+  manipulatedFile?: { key: string; url: string };
 }
 
 const ProjectDisplayPage = () => {
-  const [projects, setProjects] = useState<Project[]>([]); // State for projects
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -37,9 +36,13 @@ const ProjectDisplayPage = () => {
         }
 
         const data = await response.json();
-        console.log("Fetched Projects:", data);
-        setProjects(data.files || []);
-        setLoading(false);
+
+        if (!data.projects || !Array.isArray(data.projects)) {
+          throw new Error("Invalid response format from API");
+        }
+
+        console.log("Fetched Projects:", data.projects);
+        setProjects(data.projects);
       } catch (err) {
         if (err instanceof Error) {
           console.error("Error fetching projects:", err.message);
@@ -48,39 +51,69 @@ const ProjectDisplayPage = () => {
           console.error("Unknown error occurred.");
           setError("An unknown error occurred.");
         }
-        setLoading(false);
+      } finally {
+        setLoading(false); // Ensure loading is set to false in all cases
       }
     };
 
     fetchProjects();
   }, []);
 
-  if (loading) {
-    return <div>Loading projects...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!projects.length) {
-    return <div>No projects found.</div>;
-  }
+  if (loading) return <div>Loading projects...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold text-center mb-6">Your Projects</h1>
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((project) => (
-          <Project
-            key={project.key}
-            name={project.key.split("/").slice(1).join("/")} // Extract project name
-            lastModified={project.lastModified}
-            size={project.size}
-            url={project.url}
-          />
-        ))}
-      </ul>
+      {selectedProject ? (
+        <div>
+          <button
+            onClick={() => setSelectedProject(null)}
+            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Back to Projects
+          </button>
+          <h2 className="text-xl font-semibold">{selectedProject.name}</h2>
+          <div className="mt-4">
+            {selectedProject.originalFile && (
+              <div>
+                <a
+                  href={selectedProject.originalFile.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline"
+                >
+                  Download Original File
+                </a>
+              </div>
+            )}
+            {selectedProject.manipulatedFile && (
+              <div>
+                <a
+                  href={selectedProject.manipulatedFile.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline"
+                >
+                  Download Manipulated File
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project) => (
+            <li
+              key={project.name}
+              onClick={() => setSelectedProject(project)}
+              className="cursor-pointer bg-white p-4 shadow rounded hover:bg-gray-100"
+            >
+              <h3 className="font-semibold">{project.name}</h3>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -30,21 +30,11 @@ router.post(
     }
 
     try {
-      console.log("User ID:", user.id);
-      console.log("File received:", !!file);
-      console.log("File type:", file.mimetype);
-      console.log("File size:", file.size);
-      console.log("Project name:", projectName);
-
       // Decode the uploaded audio file
       const decodedAudio = await decodeAudio(file.buffer);
-      console.log("Decoded audio data:", decodedAudio);
-
       // Manipulate the audio data
       const float32ChannelData = new Float32Array(decodedAudio.channelData);
       const manipulatedAudio = manipulateAudio([float32ChannelData]);
-      console.log("Manipulated audio data:", manipulatedAudio);
-
       // Encode the manipulated audio
       const encodedAudioBuffer = await encodeAudio(
         manipulatedAudio,
@@ -107,25 +97,48 @@ router.get("/user-files", authenticateToken, async (req, res) => {
   try {
     const params: AWS.S3.ListObjectsV2Request = {
       Bucket: process.env.S3_BUCKET_NAME!,
-      Prefix: `${user.id}/`, // Ensure this matches the upload folder structure
+      Prefix: `${user.id}/`, // User-specific folder
     };
 
     const data = await s3.listObjectsV2(params).promise();
 
     if (!data.Contents || data.Contents.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No files found in your folder." });
+      return res.status(200).json({ success: true, projects: [] });
     }
 
-    const files = data.Contents.map((file) => ({
-      key: file.Key,
-      lastModified: file.LastModified,
-      size: file.Size,
-      url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.Key}`,
+    // Group files by project name
+    const groupedProjects: Record<
+      string,
+      { originalFile?: any; manipulatedFile?: any }
+    > = {};
+
+    for (const file of data.Contents) {
+      const parts = file.Key!.split("/");
+      const projectName = parts[1]; // Assuming structure: userID/projectName/fileName
+
+      if (!groupedProjects[projectName]) {
+        groupedProjects[projectName] = {};
+      }
+
+      if (file.Key!.includes("manipulated")) {
+        groupedProjects[projectName].manipulatedFile = {
+          key: file.Key,
+          url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.Key}`,
+        };
+      } else {
+        groupedProjects[projectName].originalFile = {
+          key: file.Key,
+          url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.Key}`,
+        };
+      }
+    }
+
+    const projects = Object.entries(groupedProjects).map(([name, files]) => ({
+      name,
+      ...files,
     }));
 
-    res.status(200).json({ success: true, files });
+    return res.status(200).json({ success: true, projects });
   } catch (error) {
     console.error("Error fetching files from S3:", error);
     res.status(500).json({ error: "Failed to fetch files." });
