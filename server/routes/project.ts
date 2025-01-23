@@ -22,7 +22,7 @@ router.post(
   async (req, res) => {
     const user = req.user;
     const file = req.file;
-    const projectName = req.body.projectName; // Assuming project name is passed in the request body
+    const projectName = req.body.projectName;
 
     if (!user?.id || !file || !projectName) {
       return res
@@ -33,10 +33,12 @@ router.post(
     try {
       // Decode the uploaded audio file
       const decodedAudio = await decodeAudio(file.buffer);
+
       // Manipulate the audio data
-      const float32ChannelData = new Float32Array(decodedAudio.channelData);
-      const manipulatedAudio = manipulateAudio([float32ChannelData]);
-      // Encode the manipulated audio
+      const int16ChannelData = new Int16Array(decodedAudio.channelData.buffer);
+      const manipulatedAudio = manipulateAudio([int16ChannelData]);
+
+      // Encode the manipulated audio back to a Buffer
       const encodedAudioBuffer = await encodeAudio(
         manipulatedAudio,
         decodedAudio.sampleRate
@@ -76,18 +78,15 @@ router.post(
         },
       });
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error processing and uploading files:", error.message);
-        return res.status(500).json({ error: error.message });
-      } else {
-        console.error("Unexpected error:", error);
-        return res.status(500).json({ error: "Internal server error." });
-      }
+      console.error("Error processing and uploading files:", error);
+      return res.status(500).json({
+        error:
+          error instanceof Error ? error.message : "Internal server error.",
+      });
     }
   }
 );
 
-// Fetch user files route
 router.get("/user-files", authenticateToken, async (req, res) => {
   const user = req.user;
 
