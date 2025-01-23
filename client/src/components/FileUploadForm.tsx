@@ -7,6 +7,7 @@ interface FileUploadFormProps {
 const FileUploadForm: React.FC<FileUploadFormProps> = ({ onLogout }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [projectName, setProjectName] = useState<string>("");
+  const [manipulationType, setManipulationType] = useState<string>("reverse");
   const [isUploading, setIsUploading] = useState<boolean>(false); // Loading state
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +33,7 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({ onLogout }) => {
     const formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("projectName", projectName); // Include project name
+    formData.append("manipulationType", manipulationType); // Include manipulation type
 
     setIsUploading(true); // Start loading
     try {
@@ -52,7 +54,9 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({ onLogout }) => {
 
       const data = await response.json();
       console.log("File uploaded successfully:", data);
-      alert(`File uploaded to project "${projectName}" successfully!`);
+      alert(
+        `File uploaded to project "${projectName}" successfully with manipulation "${manipulationType}"!`
+      );
     } catch (error) {
       console.error("Error uploading file:", error);
       alert("Error uploading file. Please try again.");
@@ -100,6 +104,19 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({ onLogout }) => {
               required
               disabled={isUploading} // Disable file input during upload
             />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Manipulation Type:</span>
+            <select
+              value={manipulationType}
+              onChange={(e) => setManipulationType(e.target.value)}
+              className="mt-2 block w-full border rounded px-4 py-2 text-sm"
+              required
+              disabled={isUploading} // Disable dropdown during upload
+            >
+              <option value="reverse">Reverse</option>
+              <option value="jumble">Jumble</option>
+            </select>
           </label>
           <button
             type="submit"

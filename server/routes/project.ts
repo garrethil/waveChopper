@@ -2,7 +2,12 @@ import express from "express";
 import multer from "multer";
 import AWS from "aws-sdk";
 import { authenticateToken } from "../middleware/authenticateToken";
-import { decodeAudio, manipulateAudio, encodeAudio } from "../utils/audioUtils";
+import {
+  decodeAudio,
+  reverseAudio,
+  jumbleAudio,
+  encodeAudio,
+} from "../utils/audioUtils";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -23,8 +28,9 @@ router.post(
     const user = req.user;
     const file = req.file;
     const projectName = req.body.projectName;
+    const manipulationType = req.body.manipulationType; // Specify the type of manipulation: "reverse" or "jumble"
 
-    if (!user?.id || !file || !projectName) {
+    if (!user?.id || !file || !projectName || !manipulationType) {
       return res
         .status(400)
         .json({ error: "User ID, file, and project name are required." });
@@ -36,7 +42,15 @@ router.post(
 
       // Manipulate the audio data
       const int16ChannelData = new Int16Array(decodedAudio.channelData.buffer);
-      const manipulatedAudio = manipulateAudio([int16ChannelData]);
+      let manipulatedAudio: any;
+      if (manipulationType === "reverse") {
+        manipulatedAudio = reverseAudio([int16ChannelData]);
+      } else if (manipulationType === "jumble") {
+        manipulatedAudio = jumbleAudio(
+          [int16ChannelData],
+          decodedAudio.sampleRate
+        );
+      }
 
       // Encode the manipulated audio back to a Buffer
       const encodedAudioBuffer = await encodeAudio(

@@ -41,18 +41,60 @@ export const decodeAudio = async (buffer: Buffer) => {
 };
 
 /**
- * Manipulate the audio data for all channels.
+ * Reverse the audio data for all channels.
  * @param channelData - The array of raw audio data for each channel.
- * @returns Manipulated audio data for all channels.
+ * @returns Reversed audio data for all channels.
  */
-export const manipulateAudio = (channelData: Int16Array[]): Int16Array[] => {
+export const reverseAudio = (channelData: Int16Array[]): Int16Array[] => {
   return channelData.map((channel) => {
     const float32Channel = int16ToFloat32(channel);
 
-    // Example manipulation: Reverse the channel
+    // Reverse the channel
     float32Channel.reverse();
 
     return float32ToInt16(float32Channel);
+  });
+};
+
+/**
+ * Randomize the audio data for all channels in larger chunks.
+ * @param channelData - The array of raw audio data for each channel.
+ * @param sampleRate - The sample rate of the audio.
+ * @returns Jumbled audio data for all channels.
+ */
+export const jumbleAudio = (
+  channelData: Int16Array[],
+  sampleRate: number
+): Int16Array[] => {
+  const chunkSize = sampleRate / 2; // Half-second chunks
+
+  return channelData.map((channel) => {
+    const float32Channel = int16ToFloat32(channel);
+    const numChunks = Math.ceil(float32Channel.length / chunkSize);
+    const chunks: Float32Array[] = [];
+
+    // Split the channel into chunks
+    for (let i = 0; i < numChunks; i++) {
+      const start = i * chunkSize;
+      const end = Math.min(start + chunkSize, float32Channel.length);
+      chunks.push(float32Channel.slice(start, end));
+    }
+
+    // Shuffle the chunks using Fisher-Yates algorithm
+    for (let i = chunks.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [chunks[i], chunks[j]] = [chunks[j], chunks[i]];
+    }
+
+    // Flatten the shuffled chunks back into a single array
+    const shuffledChannel = new Float32Array(float32Channel.length);
+    let offset = 0;
+    for (const chunk of chunks) {
+      shuffledChannel.set(chunk, offset);
+      offset += chunk.length;
+    }
+
+    return float32ToInt16(shuffledChannel);
   });
 };
 

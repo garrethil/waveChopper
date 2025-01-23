@@ -5,6 +5,7 @@ export interface IProject extends Document {
   name: string;
   files: {
     fileName: string;
+    manipulationType: string;
     s3Url: string;
     uploadDate: Date;
   }[];
