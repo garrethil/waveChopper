@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 
-interface FileUploadFormProps {
-  onLogout: () => void;
-}
-
-const FileUploadForm: React.FC<FileUploadFormProps> = ({ onLogout }) => {
+const FileUploadForm: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [projectName, setProjectName] = useState<string>("");
   const [manipulationType, setManipulationType] = useState<string>("reverse");
@@ -69,13 +65,6 @@ const FileUploadForm: React.FC<FileUploadFormProps> = ({ onLogout }) => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Upload WAV File</h1>
-        <button
-          onClick={onLogout}
-          className="bg-red-500 text-white font-semibold px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
-          disabled={isUploading} // Disable logout during upload
-        >
-          Log Out
-        </button>
       </div>
       {isUploading ? (
         <div className="text-center text-blue-500 font-semibold">

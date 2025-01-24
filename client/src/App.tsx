@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import UploadPage from "./pages/UploadPage";
 import ProjectDisplayPage from "./pages/ProjectDisplayPage";
 import HomePage from "./pages/HomePage";
+import NavBar from "./components/NavBar";
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -26,30 +27,22 @@ const App: React.FC = () => {
 
   return (
     <Router>
+      <NavBar onLogout={handleLogout} isLoggedIn={isLoggedIn} />
+
       <Switch>
         {/* Login Route */}
         <Route
           path="/"
           exact
           render={() =>
-            isLoggedIn ? (
-              <HomePage onLogout={handleLogout} />
-            ) : (
-              <LoginPage onLogin={handleLogin} />
-            )
+            isLoggedIn ? <HomePage /> : <LoginPage onLogin={handleLogin} />
           }
         />
 
         {/* Upload Route */}
         <Route
           path="/upload"
-          render={() =>
-            isLoggedIn ? (
-              <UploadPage onLogout={handleLogout} />
-            ) : (
-              <Redirect to="/" />
-            )
-          }
+          render={() => (isLoggedIn ? <UploadPage /> : <Redirect to="/" />)}
         />
 
         {/* Project Display Route */}
