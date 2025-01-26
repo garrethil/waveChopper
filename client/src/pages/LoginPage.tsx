@@ -42,7 +42,8 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 font-mono">
+      <h2>Please login or signup to start chopping</h2>
       <button
         onClick={() => setShowAuthModal(true)}
         className="bg-blue-500 text-white px-6 py-2 rounded-lg"

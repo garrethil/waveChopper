@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        mono: ['"IBM Plex Mono"', "serif"], // Add Roboto Mono as a custom font
+        mono: ['"IBM Plex Mono"', "serif"],
       },
     },
   },
