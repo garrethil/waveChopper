@@ -27,35 +27,37 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <NavBar onLogout={handleLogout} isLoggedIn={isLoggedIn} />
+      <div className="font-mono">
+        <NavBar onLogout={handleLogout} isLoggedIn={isLoggedIn} />
 
-      <Switch>
-        {/* Login Route */}
-        <Route
-          path="/"
-          exact
-          render={() =>
-            isLoggedIn ? <HomePage /> : <LoginPage onLogin={handleLogin} />
-          }
-        />
+        <Switch>
+          {/* Login Route */}
+          <Route
+            path="/"
+            exact
+            render={() =>
+              isLoggedIn ? <HomePage /> : <LoginPage onLogin={handleLogin} />
+            }
+          />
 
-        {/* Upload Route */}
-        <Route
-          path="/upload"
-          render={() => (isLoggedIn ? <UploadPage /> : <Redirect to="/" />)}
-        />
+          {/* Upload Route */}
+          <Route
+            path="/upload"
+            render={() => (isLoggedIn ? <UploadPage /> : <Redirect to="/" />)}
+          />
 
-        {/* Project Display Route */}
-        <Route
-          path="/projects"
-          render={() =>
-            isLoggedIn ? <ProjectDisplayPage /> : <Redirect to="/" />
-          }
-        />
+          {/* Project Display Route */}
+          <Route
+            path="/projects"
+            render={() =>
+              isLoggedIn ? <ProjectDisplayPage /> : <Redirect to="/" />
+            }
+          />
 
-        {/* Fallback for undefined routes */}
-        <Redirect to="/" />
-      </Switch>
+          {/* Fallback for undefined routes */}
+          <Redirect to="/" />
+        </Switch>
+      </div>
     </Router>
   );
 };
