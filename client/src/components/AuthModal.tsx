@@ -3,11 +3,15 @@ import React, { useState } from "react";
 interface AuthModalProps {
   onClose: () => void;
   onLogin: (email: string, password: string) => void;
-  onSignup: (email: string, password: string) => void; // Add this line
+  onAuthSuccess: (message: string, type: "success" | "error") => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
-  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Signup
+const AuthModal: React.FC<AuthModalProps> = ({
+  onClose,
+  onLogin,
+  onAuthSuccess,
+}) => {
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,27 +35,40 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
           // Login success
           localStorage.setItem("authToken", data.token);
           onLogin(email, password); // Pass email and password to the parent onLogin function
-          alert("Login successful!");
+          onAuthSuccess("Login successful!", "success"); // Trigger success alert
         } else {
           // Signup success
-          alert("Signup successful! Please log in.");
+          onAuthSuccess("Signup successful! Please log in.", "success");
         }
-        onClose();
       } else {
-        alert(data.message || "An error occurred.");
+        onAuthSuccess(data.message || "An error occurred.", "error"); // Trigger error alert
       }
     } catch (error) {
       console.error("Error during authentication:", error);
-      alert("An error occurred. Please try again.");
+      onAuthSuccess("An error occurred. Please try again.", "error"); // Trigger error alert
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full relative">
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        >
+          &times;
+        </button>
         <h2 className="text-xl font-bold mb-4 text-center">
           {isLogin ? "Log In" : "Sign Up"}
         </h2>
+        <button
+          onClick={() => setIsLogin(!isLogin)}
+          className="text-blue-500 hover:underline text-sm"
+        >
+          {isLogin
+            ? "Don't have an account? Sign Up"
+            : "Already have an account? Log In"}
+        </button>
         <form onSubmit={handleAuth} className="flex flex-col space-y-4">
           <input
             type="email"
@@ -71,23 +88,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLogin }) => {
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             {isLogin ? "Log In" : "Sign Up"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsLogin(!isLogin)}
-            className="w-full bg-gray-300 text-gray-800 font-semibold py-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
-          >
-            Switch to {isLogin ? "Sign Up" : "Log In"}
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-full bg-red-500 text-white font-semibold py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
-          >
-            Cancel
           </button>
         </form>
       </div>
