@@ -171,12 +171,7 @@ router.delete("/delete-project", authenticateToken, async (req, res) => {
   const user = req.user;
   const projectName = req.body.projectName;
 
-  console.log("Delete project request received");
-  console.log("User ID:", user?.id);
-  console.log("Project Name:", projectName);
-
   if (!user?.id || !projectName) {
-    console.log("Missing user ID or project name");
     return res
       .status(400)
       .json({ error: "User ID and project name are required." });
@@ -189,11 +184,7 @@ router.delete("/delete-project", authenticateToken, async (req, res) => {
       Prefix: `${user.id}/${projectName}/`,
     };
 
-    console.log("Listing objects with params:", listParams);
-
     const listData = await s3.listObjectsV2(listParams).promise();
-
-    console.log("List data received:", listData);
 
     if (!listData.Contents || listData.Contents.length === 0) {
       return res.status(404).json({ error: "Project not found." });
@@ -206,10 +197,9 @@ router.delete("/delete-project", authenticateToken, async (req, res) => {
         Objects: listData.Contents.map((item) => ({ Key: item.Key! })),
       },
     };
-    // Delete the files
-    const deleteData = await s3.deleteObjects(deleteParams).promise();
 
-    console.log("Delete data received:", deleteData);
+    // Delete the files
+    await s3.deleteObjects(deleteParams).promise();
 
     return res.status(200).json({ message: "Project deleted successfully." });
   } catch (error) {
