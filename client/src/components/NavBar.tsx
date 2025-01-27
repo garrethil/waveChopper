@@ -26,7 +26,15 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
     <nav className="bg-primary-headerBG text-primary-headerText p-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Brand and Home Button */}
-        <button onClick={navigateToHome}>
+        <button
+          className="flex items-center justify-center"
+          onClick={navigateToHome}
+        >
+          <img
+            className="h-14 w-18"
+            src="/wave-yellow.svg"
+            alt="Wave-Chopper Logo"
+          />
           <h1 className="text-3xl font-bold">Wave-Chopper</h1>
         </button>
 
@@ -46,47 +54,63 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth="2"
                 d="M4 6h16M4 12h16m-7 6h7"
               />
             </svg>
           </button>
         </div>
 
-        {/* Navigation Links */}
-        <div
-          className={`${
-            isOpen ? "block" : "hidden"
-          } md:flex md:items-center md:space-x-6 w-full md:w-auto`}
-        >
+        {/* Desktop Menu */}
+        <div className="hidden md:flex space-x-4">
+          <button
+            onClick={navigateToUpload}
+            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+          >
+            Upload Files
+          </button>
+          <button
+            onClick={navigateToProjects}
+            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+          >
+            View Projects
+          </button>
           {isLoggedIn && (
-            <div className="flex flex-col md:flex-row md:items-center md:space-x-10 w-full">
-              <div className="flex flex-col md:flex-row md:space-x-6">
-                <button
-                  onClick={navigateToUpload}
-                  className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-                >
-                  + New Project
-                </button>
-                <button
-                  onClick={navigateToProjects}
-                  className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-                >
-                  View Projects
-                </button>
-              </div>
-
-              {/* Log Out Button */}
-              <button
-                onClick={onLogout}
-                className="px-3 py-2 mt-4 md:mt-0 md:ml-auto text-white bg-red-500 hover:bg-red-600 rounded"
-              >
-                Log Out
-              </button>
-            </div>
+            <button
+              onClick={onLogout}
+              className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
+            >
+              Log Out
+            </button>
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden mt-4 flex flex-col space-y-2">
+          <button
+            onClick={navigateToUpload}
+            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+          >
+            Upload Files
+          </button>
+          <button
+            onClick={navigateToProjects}
+            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+          >
+            View Projects
+          </button>
+          {isLoggedIn && (
+            <button
+              onClick={onLogout}
+              className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
+            >
+              Log Out
+            </button>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

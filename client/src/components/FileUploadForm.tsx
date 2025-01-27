@@ -77,6 +77,7 @@ const FileUploadForm: React.FC = () => {
             <input
               type="text"
               value={projectName}
+              placeholder="Enter project name"
               onChange={(e) => setProjectName(e.target.value)}
               className="mt-2 block w-full border rounded px-4 py-2 text-sm"
               required
