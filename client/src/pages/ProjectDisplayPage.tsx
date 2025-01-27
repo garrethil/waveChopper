@@ -89,66 +89,79 @@ const ProjectDisplayPage = () => {
     }
   };
 
-  if (loading) return <div>Loading projects...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading)
+    return <div className="text-xl text-center mt-8">Loading projects...</div>;
+  if (error)
+    return <div className="text-xl text-center mt-8">Error: {error}</div>;
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold text-center mb-6">Your Projects</h1>
+    <div className="flex flex-col items-center p-6 bg-primary min-h-screen text-primary-text">
       {selectedProject ? (
-        <div>
+        <div className="relative p-6 rounded-lg w-full">
+          {/* Back to Projects Button */}
           <button
             onClick={() => setSelectedProject(null)}
-            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+            className="flex-col md:absolute top-4 left-4 px-4 py-2 mb-10 bg-primary-headerBG text-s md:text-lg text-white rounded hover:bg-blue-600"
           >
-            Back to Projects
+            ↶ Back to Projects
           </button>
-          <h2 className="text-xl font-semibold">{selectedProject.name}</h2>
-          <div className="mt-4">
+
+          {/* Project Name */}
+          <h2 className="text-4xl font-semibold text-primary-headerText text-center mb-6 underline">
+            {selectedProject.name}
+          </h2>
+
+          {/* Links */}
+          <div className="flex flex-col items-center gap-4 mt-8">
             {selectedProject.originalFile && (
-              <div>
-                <a
-                  href={selectedProject.originalFile.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 underline"
-                >
-                  Download Original File
-                </a>
-              </div>
+              <a
+                href={selectedProject.originalFile.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-6 py-3 bg-blue-100 text-blue-700 rounded-lg shadow hover:bg-blue-200 transition-all text-2xl"
+              >
+                View Original File
+              </a>
             )}
             {selectedProject.manipulatedFile && (
-              <div>
-                <a
-                  href={selectedProject.manipulatedFile.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 underline"
-                >
-                  Download Manipulated File
-                </a>
-              </div>
+              <a
+                href={selectedProject.manipulatedFile.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-6 py-3 bg-green-100 text-green-700 rounded-lg shadow hover:bg-green-200 transition-all text-2xl"
+              >
+                View Manipulated File
+              </a>
             )}
           </div>
-          <button
-            onClick={() => handleDelete(selectedProject.name)}
-            className="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Delete
-          </button>
+
+          {/* Delete Button */}
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => handleDelete(selectedProject.name)}
+              className="px-6 py-3 mt-10 bg-red-500 text-white rounded-lg hover:bg-red-600 text-xs"
+            >
+              Delete Project
+            </button>
+          </div>
         </div>
       ) : (
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <li
-              key={project.name}
-              onClick={() => setSelectedProject(project)}
-              className="cursor-pointer bg-white p-4 shadow rounded hover:bg-gray-100"
-            >
-              <h3 className="font-semibold">{project.name}</h3>
-            </li>
-          ))}
-        </ul>
+        <div className="w-[80%] flex flex-col justify-center text-primary-bodyText">
+          <h1 className="text-2xl font-bold text-center mb-6 text-primary-headerText underline">
+            Your Projects
+          </h1>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            {projects.map((project) => (
+              <li
+                key={project.name}
+                onClick={() => setSelectedProject(project)}
+                className="cursor-pointer p-4 shadow rounded outline-none transition-all duration-300 hover:outline hover:outline-2 hover:outline-primary-headerBG"
+              >
+                <h3 className="font-semibold">{project.name}</h3>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

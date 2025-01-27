@@ -67,7 +67,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
             onClick={navigateToUpload}
             className="px-3 py-2 text-white hover:bg-gray-700 rounded"
           >
-            Upload Files
+            +New Project
           </button>
           <button
             onClick={navigateToProjects}
@@ -93,7 +93,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
             onClick={navigateToUpload}
             className="px-3 py-2 text-white hover:bg-gray-700 rounded"
           >
-            Upload Files
+            +New Project
           </button>
           <button
             onClick={navigateToProjects}
