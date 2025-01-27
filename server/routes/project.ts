@@ -166,4 +166,58 @@ router.get("/user-files", authenticateToken, async (req, res) => {
   }
 });
 
+// Delete project route
+router.delete("/delete-project", authenticateToken, async (req, res) => {
+  const user = req.user;
+  const projectName = req.body.projectName;
+
+  console.log("Delete project request received");
+  console.log("User ID:", user?.id);
+  console.log("Project Name:", projectName);
+
+  if (!user?.id || !projectName) {
+    console.log("Missing user ID or project name");
+    return res
+      .status(400)
+      .json({ error: "User ID and project name are required." });
+  }
+
+  try {
+    // List all files in the project folder
+    const listParams: AWS.S3.ListObjectsV2Request = {
+      Bucket: process.env.S3_BUCKET_NAME!,
+      Prefix: `${user.id}/${projectName}/`,
+    };
+
+    console.log("Listing objects with params:", listParams);
+
+    const listData = await s3.listObjectsV2(listParams).promise();
+
+    console.log("List data received:", listData);
+
+    if (!listData.Contents || listData.Contents.length === 0) {
+      return res.status(404).json({ error: "Project not found." });
+    }
+
+    // Create delete parameters
+    const deleteParams: AWS.S3.DeleteObjectsRequest = {
+      Bucket: process.env.S3_BUCKET_NAME!,
+      Delete: {
+        Objects: listData.Contents.map((item) => ({ Key: item.Key! })),
+      },
+    };
+    // Delete the files
+    const deleteData = await s3.deleteObjects(deleteParams).promise();
+
+    console.log("Delete data received:", deleteData);
+
+    return res.status(200).json({ message: "Project deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    return res.status(500).json({
+      error: error instanceof Error ? error.message : "Internal server error.",
+    });
+  }
+});
+
 export default router;

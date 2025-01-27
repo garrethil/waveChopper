@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Project from "../components/Project";
 
 // Define types for the API response
 interface Project {
@@ -59,6 +60,35 @@ const ProjectDisplayPage = () => {
     fetchProjects();
   }, []);
 
+  const handleDelete = async (projectName: string) => {
+    const token = localStorage.getItem("authToken");
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/projects/delete-project",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ projectName }),
+        }
+      );
+
+      if (response.ok) {
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project.name !== projectName)
+        );
+        setSelectedProject(null);
+      } else {
+        const errorText = await response.text();
+        console.error("Failed to delete project:", errorText);
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
+
   if (loading) return <div>Loading projects...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -100,6 +130,12 @@ const ProjectDisplayPage = () => {
               </div>
             )}
           </div>
+          <button
+            onClick={() => handleDelete(selectedProject.name)}
+            className="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Delete
+          </button>
         </div>
       ) : (
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

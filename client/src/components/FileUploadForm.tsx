@@ -51,7 +51,7 @@ const FileUploadForm: React.FC = () => {
       const data = await response.json();
       console.log("File uploaded successfully:", data);
       alert(
-        `File uploaded to project "${projectName}" successfully with manipulation "${manipulationType}"!`
+        `"${projectName}" uploaded successfully with manipulation "${manipulationType}"!`
       );
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -71,7 +71,10 @@ const FileUploadForm: React.FC = () => {
           Uploading file, please wait...
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col space-y-4 min-w-[1/3]"
+        >
           <label className="block">
             <span className="text-gray-700">Project Name:</span>
             <input
