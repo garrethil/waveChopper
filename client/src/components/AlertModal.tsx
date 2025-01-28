@@ -6,6 +6,7 @@ const AlertModal: React.FC<{
   onClose: () => void;
   onSuccessClose?: () => void;
 }> = ({ message, type, onClose, onSuccessClose }) => {
+  // Close the modal
   const handleClose = () => {
     onClose();
     if (type === "success" && onSuccessClose) {

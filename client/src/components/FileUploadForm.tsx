@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import AlertModal from "./AlertModal";
 
 const FileUploadForm: React.FC = () => {
+  // States for file form fields and alerts
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [projectName, setProjectName] = useState<string>("");
   const [manipulationType, setManipulationType] = useState<string>("reverse");
@@ -34,25 +35,30 @@ const FileUploadForm: React.FC = () => {
     }
   }, [isUploading]);
 
+  // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setSelectedFile(event.target.files[0]);
+      const file = event.target.files[0];
       const maxSizeInBytes = 100 * 1024 * 1024; // 100MB
 
-      if (event.target.files[0].size > maxSizeInBytes) {
+      if (file.size > maxSizeInBytes) {
         setAlert({
           message: "File size must be less than 100MB.",
           type: "error",
         });
         return;
       }
+
+      setSelectedFile(file);
     }
   };
 
+  // Handle manipulation type selection
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setManipulationType(e.target.value);
   };
 
+  // Handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -81,9 +87,7 @@ const FileUploadForm: React.FC = () => {
         "http://localhost:8000/api/projects/upload",
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           body: formData,
         }
       );
@@ -108,6 +112,7 @@ const FileUploadForm: React.FC = () => {
     }
   };
 
+  // Handle success modal close
   const handleSuccessClose = () => {
     history.push("/projects");
   };
@@ -120,7 +125,7 @@ const FileUploadForm: React.FC = () => {
             {uploadMessage}
           </div>
         ) : (
-          <div className="">
+          <div>
             <h1 className="text-2xl font-bold text-center text-primary-headerText mb-6">
               Upload New Project
             </h1>
@@ -159,40 +164,16 @@ const FileUploadForm: React.FC = () => {
 
               {/* Manipulation Type */}
               <label className="block">
-                <span className="text-primary-bodyText">Effect:</span>
+                <span className="text-primary-bodyText">Select Effect:</span>
                 <select
                   value={manipulationType}
                   onChange={handleSelectChange}
                   className="mt-2 block w-full border rounded px-4 py-2 text-sm"
                   required
                   disabled={isUploading}
-                  onBlur={(e) => {
-                    const selectedOption =
-                      e.target.options[e.target.selectedIndex];
-                    selectedOption.text =
-                      selectedOption.value.charAt(0).toUpperCase() +
-                      selectedOption.value.slice(1);
-                  }}
-                  onFocus={(e) => {
-                    const options = e.target.options;
-                    for (let i = 0; i < options.length; i++) {
-                      const option = options[i];
-                      option.text = `${
-                        option.value.charAt(0).toUpperCase() +
-                        option.value.slice(1)
-                      } - ${option.title}`;
-                    }
-                  }}
                 >
-                  <option value="reverse" title="Reverse the audio data.">
-                    Reverse
-                  </option>
-                  <option
-                    value="jumble"
-                    title="Randomize the audio data in 0.5s chunks."
-                  >
-                    Jumble
-                  </option>
+                  <option value="reverse">Reverse</option>
+                  <option value="jumble">Jumble</option>
                 </select>
               </label>
 
@@ -205,6 +186,21 @@ const FileUploadForm: React.FC = () => {
                 {isUploading ? "Uploading..." : "Upload"}
               </button>
             </form>
+
+            {/* Effect Descriptions */}
+            <div className="mt-8 p-4 rounded shadow">
+              <h2 className="text-lg font-semibold text-primary-headerText mb-4">
+                Effect Descriptions
+              </h2>
+              <ul className="list-disc list-inside text-primary-bodyText">
+                <li>
+                  <strong>Reverse:</strong> Reverses the audio file.
+                </li>
+                <li>
+                  <strong>Jumble:</strong> Randomizes chunks of the audio file.
+                </li>
+              </ul>
+            </div>
           </div>
         )}
       </div>

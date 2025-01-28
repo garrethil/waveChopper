@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Project from "../components/Project";
 
 // Define types for the API response
 interface Project {

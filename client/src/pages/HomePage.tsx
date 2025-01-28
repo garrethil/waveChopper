@@ -1,6 +1,7 @@
 import React from "react";
 
 const HomePage: React.FC = () => {
+  // Home Page once logged in
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-primary p-8 pt-10">
       <h1 className="text-4xl font-bold mb-4 text-primary-headerText">

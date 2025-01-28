@@ -3,6 +3,7 @@ import AuthModal from "../components/AuthModal";
 import AlertModal from "../components/AlertModal";
 
 const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+  // State for the modal
   const [modalState, setModalState] = useState<{
     type: "login" | "alert" | null;
     data?: { message?: string; type?: "success" | "error" };

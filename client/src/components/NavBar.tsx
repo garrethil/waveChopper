@@ -10,16 +10,8 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
 
-  const navigateToHome = () => {
-    history.push("/");
-  };
-
-  const navigateToUpload = () => {
-    history.push("/upload");
-  };
-
-  const navigateToProjects = () => {
-    history.push("/projects");
+  const navigateTo = (path: string) => {
+    history.push(path);
   };
 
   return (
@@ -28,7 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
         {/* Brand and Home Button */}
         <button
           className="flex items-center justify-center"
-          onClick={navigateToHome}
+          onClick={() => navigateTo("/")}
         >
           <img
             className="h-14 w-18"
@@ -67,13 +59,13 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
         {isLoggedIn && (
           <div className="hidden md:flex space-x-4">
             <button
-              onClick={navigateToUpload}
+              onClick={() => navigateTo("/upload")}
               className="px-3 py-2 text-white hover:bg-gray-700 rounded"
             >
               +New Project
             </button>
             <button
-              onClick={navigateToProjects}
+              onClick={() => navigateTo("/projects")}
               className="px-3 py-2 text-white hover:bg-gray-700 rounded"
             >
               View Projects
@@ -92,13 +84,13 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
       {isLoggedIn && isOpen && (
         <div className="md:hidden mt-4 flex flex-col space-y-2">
           <button
-            onClick={navigateToUpload}
+            onClick={() => navigateTo("/upload")}
             className="px-3 py-2 text-white hover:bg-gray-700 rounded"
           >
             +New Project
           </button>
           <button
-            onClick={navigateToProjects}
+            onClick={() => navigateTo("/projects")}
             className="px-3 py-2 text-white hover:bg-gray-700 rounded"
           >
             View Projects

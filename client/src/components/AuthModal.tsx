@@ -11,10 +11,12 @@ const AuthModal: React.FC<AuthModalProps> = ({
   onLogin,
   onAuthSuccess,
 }) => {
+  // state for login/signup form
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Handle Login/Signup form submission
   const handleAuth = async (event: React.FormEvent) => {
     event.preventDefault();
     const endpoint = isLogin
@@ -35,17 +37,17 @@ const AuthModal: React.FC<AuthModalProps> = ({
           // Login success
           localStorage.setItem("authToken", data.token);
           onLogin(email, password); // Pass email and password to the parent onLogin function
-          onAuthSuccess("Login successful!", "success"); // Trigger success alert
+          onAuthSuccess("Login successful!", "success");
         } else {
           // Signup success
           onAuthSuccess("Signup successful! Please log in.", "success");
         }
       } else {
-        onAuthSuccess(data.message || "An error occurred.", "error"); // Trigger error alert
+        onAuthSuccess(data.message || "An error occurred.", "error");
       }
     } catch (error) {
       console.error("Error during authentication:", error);
-      onAuthSuccess("An error occurred. Please try again.", "error"); // Trigger error alert
+      onAuthSuccess("An error occurred. Please try again.", "error");
     }
   };
 
