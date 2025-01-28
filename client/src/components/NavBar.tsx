@@ -38,82 +38,77 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
           <h1 className="text-3xl font-bold">Wave-Chopper</h1>
         </button>
 
-        {/* Hamburger Menu for Small Screens */}
-        <div className="block md:hidden">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-white hover:text-gray-300 focus:outline-none"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+        {/* Hamburger Menu for Small Screens (only when logged in) */}
+        {isLoggedIn && (
+          <div className="block md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-white hover:text-gray-300 focus:outline-none"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            </svg>
-          </button>
-        </div>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {/* Desktop Menu */}
-        <div className="">
-          {isLoggedIn && (
-            <div className="hidden md:flex space-x-4">
-              {" "}
-              <button
-                onClick={navigateToUpload}
-                className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-              >
-                +New Project
-              </button>
-              <button
-                onClick={navigateToProjects}
-                className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-              >
-                View Projects
-              </button>
-              <button
-                onClick={onLogout}
-                className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
-              >
-                Log Out
-              </button>
-            </div>
-          )}
-        </div>
+        {isLoggedIn && (
+          <div className="hidden md:flex space-x-4">
+            <button
+              onClick={navigateToUpload}
+              className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+            >
+              +New Project
+            </button>
+            <button
+              onClick={navigateToProjects}
+              className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+            >
+              View Projects
+            </button>
+            <button
+              onClick={onLogout}
+              className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
+            >
+              Log Out
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
+      {/* Mobile Menu (only when logged in) */}
+      {isLoggedIn && isOpen && (
         <div className="md:hidden mt-4 flex flex-col space-y-2">
-          {isLoggedIn && (
-            <div>
-              <button
-                onClick={navigateToUpload}
-                className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-              >
-                +New Project
-              </button>
-              <button
-                onClick={navigateToProjects}
-                className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-              >
-                View Projects
-              </button>
-              <button
-                onClick={onLogout}
-                className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
-              >
-                Log Out
-              </button>
-            </div>
-          )}
+          <button
+            onClick={navigateToUpload}
+            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+          >
+            +New Project
+          </button>
+          <button
+            onClick={navigateToProjects}
+            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+          >
+            View Projects
+          </button>
+          <button
+            onClick={onLogout}
+            className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
+          >
+            Log Out
+          </button>
         </div>
       )}
     </nav>

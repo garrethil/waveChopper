@@ -121,7 +121,7 @@ const FileUploadForm: React.FC = () => {
           </div>
         ) : (
           <div className="">
-            <h1 className="text-2xl font-bold text-center mb-6">
+            <h1 className="text-2xl font-bold text-center text-primary-headerText mb-6">
               Upload New Project
             </h1>
             <form
