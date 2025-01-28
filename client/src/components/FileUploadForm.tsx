@@ -37,6 +37,15 @@ const FileUploadForm: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setSelectedFile(event.target.files[0]);
+      const maxSizeInBytes = 100 * 1024 * 1024; // 100MB
+
+      if (event.target.files[0].size > maxSizeInBytes) {
+        setAlert({
+          message: "File size must be less than 100MB.",
+          type: "error",
+        });
+        return;
+      }
     }
   };
 
