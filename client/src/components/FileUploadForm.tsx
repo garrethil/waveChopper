@@ -188,7 +188,7 @@ const FileUploadForm: React.FC = () => {
             </form>
 
             {/* Effect Descriptions */}
-            <div className="mt-8 p-4 rounded shadow">
+            <div className="mt-8 p-4 rounded shadow-lg">
               <h2 className="text-lg font-semibold text-primary-headerText mb-4">
                 Effect Descriptions
               </h2>

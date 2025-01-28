@@ -44,12 +44,14 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
           onClose={closeModal}
         />
       )}
-      <button
-        className="p-4 bg-primary-headerText rounded text-primary-headerBG font-semibold hover:text-primary-bodyText"
-        onClick={() => openModal("login")}
-      >
-        Login
-      </button>
+      <div className="pb-[80px]">
+        <button
+          className="p-4 bg-primary-headerText rounded text-primary-headerBG text-md md:text-2xl font-semibold hover:text-primary-bodyText"
+          onClick={() => openModal("login")}
+        >
+          Login / Signup
+        </button>
+      </div>
     </div>
   );
 };
