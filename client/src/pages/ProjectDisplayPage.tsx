@@ -170,7 +170,9 @@ const ProjectDisplayPage = () => {
                 onClick={() => setSelectedProject(project)}
                 className="cursor-pointer text-primary-headerText p-4 shadow rounded outline-none transition-all duration-300 outline outline-2 hover:outline-4 outline-primary-headerBG"
               >
-                <h3 className="font-semibold underline">{project.name}</h3>
+                <h3 className="font-semibold text-xl underline">
+                  {project.name}
+                </h3>
                 <p className="text-sm text-primary-bodyText">
                   effect type:{" "}
                   <span className="underline"> {project.manipulationType}</span>
