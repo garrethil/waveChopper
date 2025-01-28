@@ -159,9 +159,7 @@ const FileUploadForm: React.FC = () => {
 
               {/* Manipulation Type */}
               <label className="block">
-                <span className="text-primary-bodyText">
-                  Manipulation Type:
-                </span>
+                <span className="text-primary-bodyText">Effect:</span>
                 <select
                   value={manipulationType}
                   onChange={handleSelectChange}
