@@ -8,7 +8,7 @@ interface AuthModalProps {
 
 const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
-  onLogin,
+  // onLogin,
   onAuthSuccess,
 }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -32,7 +32,6 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
       if (response.ok) {
         localStorage.setItem("authToken", data.token);
-        onLogin();
         onAuthSuccess(
           isLogin
             ? "Login successful!"
