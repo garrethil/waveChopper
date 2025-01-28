@@ -32,6 +32,10 @@ const FileUploadForm: React.FC = () => {
     }
   };
 
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setManipulationType(e.target.value);
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -70,7 +74,7 @@ const FileUploadForm: React.FC = () => {
 
       await response.json();
       alert(
-        `"${projectName}" uploaded successfully with manipulation "${manipulationType}"!`
+        `"${projectName}" uploaded successfully with effect "${manipulationType}"!`
       );
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -132,20 +136,44 @@ const FileUploadForm: React.FC = () => {
                 </span>
                 <select
                   value={manipulationType}
-                  onChange={(e) => setManipulationType(e.target.value)}
+                  onChange={handleSelectChange}
                   className="mt-2 block w-full border rounded px-4 py-2 text-sm"
                   required
                   disabled={isUploading}
+                  onBlur={(e) => {
+                    const selectedOption =
+                      e.target.options[e.target.selectedIndex];
+                    selectedOption.text =
+                      selectedOption.value.charAt(0).toUpperCase() +
+                      selectedOption.value.slice(1);
+                  }}
+                  onFocus={(e) => {
+                    const options = e.target.options;
+                    for (let i = 0; i < options.length; i++) {
+                      const option = options[i];
+                      option.text = `${
+                        option.value.charAt(0).toUpperCase() +
+                        option.value.slice(1)
+                      } - ${option.title}`;
+                    }
+                  }}
                 >
-                  <option value="reverse">Reverse</option>
-                  <option value="jumble">Jumble</option>
+                  <option value="reverse" title="Reverse the audio data.">
+                    Reverse
+                  </option>
+                  <option
+                    value="jumble"
+                    title="Randomize the audio data in 0.5s chunks."
+                  >
+                    Jumble
+                  </option>
                 </select>
               </label>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                className="col-span-1 sm:col-span-2 w-full bg-blue-500 text-white font-semibold py-3 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="col-span-1 sm:col-span-2 w-full bg-green-100 text-green-700 font-semibold py-3 rounded hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isUploading}
               >
                 {isUploading ? "Uploading..." : "Upload"}

@@ -62,26 +62,29 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-4">
-          <button
-            onClick={navigateToUpload}
-            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-          >
-            +New Project
-          </button>
-          <button
-            onClick={navigateToProjects}
-            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-          >
-            View Projects
-          </button>
+        <div className="">
           {isLoggedIn && (
-            <button
-              onClick={onLogout}
-              className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
-            >
-              Log Out
-            </button>
+            <div className="hidden md:flex space-x-4">
+              {" "}
+              <button
+                onClick={navigateToUpload}
+                className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+              >
+                +New Project
+              </button>
+              <button
+                onClick={navigateToProjects}
+                className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+              >
+                View Projects
+              </button>
+              <button
+                onClick={onLogout}
+                className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
+              >
+                Log Out
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -89,25 +92,27 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden mt-4 flex flex-col space-y-2">
-          <button
-            onClick={navigateToUpload}
-            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-          >
-            +New Project
-          </button>
-          <button
-            onClick={navigateToProjects}
-            className="px-3 py-2 text-white hover:bg-gray-700 rounded"
-          >
-            View Projects
-          </button>
           {isLoggedIn && (
-            <button
-              onClick={onLogout}
-              className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
-            >
-              Log Out
-            </button>
+            <div>
+              <button
+                onClick={navigateToUpload}
+                className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+              >
+                +New Project
+              </button>
+              <button
+                onClick={navigateToProjects}
+                className="px-3 py-2 text-white hover:bg-gray-700 rounded"
+              >
+                View Projects
+              </button>
+              <button
+                onClick={onLogout}
+                className="px-3 py-2 text-white bg-red-500 hover:bg-red-600 rounded"
+              >
+                Log Out
+              </button>
+            </div>
           )}
         </div>
       )}
