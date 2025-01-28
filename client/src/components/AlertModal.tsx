@@ -4,7 +4,15 @@ const AlertModal: React.FC<{
   message: string;
   type: "success" | "error";
   onClose: () => void;
-}> = ({ message, type, onClose }) => {
+  onSuccessClose?: () => void;
+}> = ({ message, type, onClose, onSuccessClose }) => {
+  const handleClose = () => {
+    onClose();
+    if (type === "success" && onSuccessClose) {
+      onSuccessClose();
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg p-4 shadow-lg w-80">
@@ -17,7 +25,7 @@ const AlertModal: React.FC<{
         </h2>
         <p className="mt-2">{message}</p>
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
         >
           Close

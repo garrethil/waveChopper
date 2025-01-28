@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import AlertModal from "./AlertModal";
 
 const FileUploadForm: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -8,6 +10,12 @@ const FileUploadForm: React.FC = () => {
   const [uploadMessage, setUploadMessage] = useState<string>(
     "Uploading file, please wait..."
   );
+  const [alert, setAlert] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+
+  const history = useHistory();
 
   useEffect(() => {
     const messages = [
@@ -40,13 +48,16 @@ const FileUploadForm: React.FC = () => {
     event.preventDefault();
 
     if (!selectedFile || !projectName.trim()) {
-      alert("Please select a file and enter a project name.");
+      setAlert({
+        message: "Please select a file and enter a project name.",
+        type: "error",
+      });
       return;
     }
 
     const token = localStorage.getItem("authToken");
     if (!token) {
-      alert("Please log in to upload files.");
+      setAlert({ message: "Please log in to upload files.", type: "error" });
       return;
     }
 
@@ -73,15 +84,23 @@ const FileUploadForm: React.FC = () => {
       }
 
       await response.json();
-      alert(
-        `"${projectName}" uploaded successfully with effect "${manipulationType}"!`
-      );
+      setAlert({
+        message: `"${projectName}" uploaded successfully with effect "${manipulationType}"!`,
+        type: "success",
+      });
     } catch (error) {
       console.error("Error uploading file:", error);
-      alert("Error uploading file. Please try again.");
+      setAlert({
+        message: "Error uploading file. Please try again.",
+        type: "error",
+      });
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const handleSuccessClose = () => {
+    history.push("/projects");
   };
 
   return (
@@ -182,6 +201,14 @@ const FileUploadForm: React.FC = () => {
           </div>
         )}
       </div>
+      {alert && (
+        <AlertModal
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+          onSuccessClose={handleSuccessClose}
+        />
+      )}
     </div>
   );
 };

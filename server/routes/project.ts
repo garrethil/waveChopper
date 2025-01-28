@@ -31,9 +31,10 @@ router.post(
     const manipulationType = req.body.manipulationType; // Specify the type of manipulation: "reverse" or "jumble"
 
     if (!user?.id || !file || !projectName || !manipulationType) {
-      return res
-        .status(400)
-        .json({ error: "User ID, file, and project name are required." });
+      return res.status(400).json({
+        error:
+          "User ID, file, project name, and manipulation type are required.",
+      });
     }
 
     try {
@@ -71,10 +72,12 @@ router.post(
         })
         .promise();
 
-      // Upload manipulated file
+      // Upload manipulated file with manipulation type in the key
       const manipulatedFileKey = `${
         user.id
-      }/${projectName}/manipulated-${Date.now()}-${file.originalname}`;
+      }/${projectName}/manipulated-${manipulationType}-${Date.now()}-${
+        file.originalname
+      }`;
       await s3
         .upload({
           Bucket: process.env.S3_BUCKET_NAME!,

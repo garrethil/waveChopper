@@ -2,15 +2,24 @@ import React from "react";
 
 interface ProjectProps {
   name: string;
+  manipulationType: string;
   lastModified: string;
   size: number;
   url: string;
 }
 
-const Project: React.FC<ProjectProps> = ({ name, lastModified, size, url }) => {
+const Project: React.FC<ProjectProps> = ({
+  name,
+  manipulationType,
+  lastModified,
+  size,
+  url,
+}) => {
   return (
     <li className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-      <h2 className="text-lg font-semibold mb-2">{name}</h2>
+      <h2 className="text-lg font-semibold mb-2">
+        {name} - {manipulationType}
+      </h2>
       <p className="text-gray-600">
         Last Modified: {new Date(lastModified).toLocaleString()}
       </p>

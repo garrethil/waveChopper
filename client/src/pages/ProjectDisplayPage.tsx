@@ -4,6 +4,7 @@ import Project from "../components/Project";
 // Define types for the API response
 interface Project {
   name: string;
+  manipulationType: string;
   originalFile?: { key: string; url: string };
   manipulatedFile?: { key: string; url: string };
 }
@@ -43,7 +44,16 @@ const ProjectDisplayPage = () => {
         }
 
         console.log("Fetched Projects:", data.projects);
-        setProjects(data.projects);
+        const projectsWithManipulationType = data.projects.map(
+          (project: Project) => {
+            const manipulationType = project.manipulatedFile?.key.split("-")[1];
+            return {
+              ...project,
+              manipulationType,
+            };
+          }
+        );
+        setProjects(projectsWithManipulationType);
       } catch (err) {
         if (err instanceof Error) {
           console.error("Error fetching projects:", err.message);
@@ -90,7 +100,11 @@ const ProjectDisplayPage = () => {
   };
 
   if (loading)
-    return <div className="text-xl text-center mt-8">Loading projects...</div>;
+    return (
+      <div className="text-xl text-center bg-primary min-h-screen text-primary-headerText">
+        Loading projects...
+      </div>
+    );
   if (error)
     return <div className="text-xl text-center mt-8">Error: {error}</div>;
 
@@ -155,9 +169,13 @@ const ProjectDisplayPage = () => {
               <li
                 key={project.name}
                 onClick={() => setSelectedProject(project)}
-                className="cursor-pointer p-4 shadow rounded outline-none transition-all duration-300 hover:outline hover:outline-2 hover:outline-primary-headerBG"
+                className="cursor-pointer text-primary-headerText p-4 shadow rounded outline-none transition-all duration-300 outline outline-2 hover:outline-4 outline-primary-headerBG"
               >
-                <h3 className="font-semibold">{project.name}</h3>
+                <h3 className="font-semibold underline">{project.name}</h3>
+                <p className="text-sm text-primary-bodyText">
+                  effect type:{" "}
+                  <span className="underline"> {project.manipulationType}</span>
+                </p>
               </li>
             ))}
           </ul>
