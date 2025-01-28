@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import AuthModal from "../components/AuthModal";
 import AlertModal from "../components/AlertModal";
 
-const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+interface LoginPageProps {
+  onLogin: () => void;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   // State for the modal
   const [modalState, setModalState] = useState<{
     type: "login" | "alert" | null;
     data?: { message?: string; type?: "success" | "error" };
   }>({ type: null });
 
+  // Open modal with specified type and data
   const openModal = (
     type: "login" | "alert",
     data?: { message?: string; type?: "success" | "error" }
@@ -16,14 +21,15 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     setModalState({ type, data });
   };
 
+  // Close modal and trigger onLogin if success
   const closeModal = () => {
-    // If the success modal is closed, trigger `onLogin`
     if (modalState.type === "alert" && modalState.data?.type === "success") {
       onLogin();
     }
     setModalState({ type: null });
   };
 
+  // Handle authentication success
   const handleAuthSuccess = (message: string, type: "success" | "error") => {
     openModal("alert", { message, type });
   };
@@ -33,7 +39,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
       {modalState.type === "login" && (
         <AuthModal
           onClose={closeModal}
-          onLogin={() => {}}
+          onLogin={onLogin}
           onAuthSuccess={handleAuthSuccess}
         />
       )}
@@ -44,9 +50,9 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
           onClose={closeModal}
         />
       )}
-      <div className="pb-[80px]">
+      <div className="pb-[200px] md:pb-20">
         <button
-          className="p-4 bg-primary-headerText rounded text-primary-headerBG text-md md:text-2xl font-semibold hover:text-primary-bodyText"
+          className="p-4 bg-primary-headerText rounded text-primary-headerBG text-lg md:text-2xl font-semibold hover:text-primary-bodyText"
           onClick={() => openModal("login")}
         >
           Login / Signup

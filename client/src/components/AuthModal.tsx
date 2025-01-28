@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 interface AuthModalProps {
   onClose: () => void;
-  onLogin: (email: string, password: string) => void;
+  onLogin: () => void;
   onAuthSuccess: (message: string, type: "success" | "error") => void;
 }
 
@@ -11,12 +11,10 @@ const AuthModal: React.FC<AuthModalProps> = ({
   onLogin,
   onAuthSuccess,
 }) => {
-  // state for login/signup form
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Handle Login/Signup form submission
   const handleAuth = async (event: React.FormEvent) => {
     event.preventDefault();
     const endpoint = isLogin
@@ -33,15 +31,14 @@ const AuthModal: React.FC<AuthModalProps> = ({
       const data = await response.json();
 
       if (response.ok) {
-        if (isLogin) {
-          // Login success
-          localStorage.setItem("authToken", data.token);
-          onLogin(email, password); // Pass email and password to the parent onLogin function
-          onAuthSuccess("Login successful!", "success");
-        } else {
-          // Signup success
-          onAuthSuccess("Signup successful! Please log in.", "success");
-        }
+        localStorage.setItem("authToken", data.token);
+        onLogin();
+        onAuthSuccess(
+          isLogin
+            ? "Login successful!"
+            : "Signup successful! You are now logged in.",
+          "success"
+        );
       } else {
         onAuthSuccess(data.message || "An error occurred.", "error");
       }

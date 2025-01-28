@@ -25,10 +25,17 @@ router.post("/register", async (req, res) => {
 
     const newUser = await User.create({ email, password });
 
+    const token = jwt.sign(
+      { _id: newUser._id, email: newUser.email },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "1d" }
+    );
+
     res.status(201).json({
       status: 201,
       success: true,
       message: "User created successfully",
+      token,
       user: { id: newUser._id, email: newUser.email },
     });
   } catch (error: any) {
