@@ -12,7 +12,7 @@ const HomePage: React.FC = () => {
         the boundaries of what’s possible with your audio. We are dedicated to
         regularly releasing new and innovative tools for your use. Stay tuned
         for exciting updates as we bring your audio transformations to the next
-        level!
+        level.
       </p>
     </div>
   );

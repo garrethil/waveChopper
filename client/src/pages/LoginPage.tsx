@@ -54,7 +54,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           Your ultimate tool for slicing, dicing, and crafting unique creations
           from your WAV files. Maintain the pristine quality of your lossless
           digital audio while unleashing your creative potential. It's time to
-          turn your sound into something extraordinary in seconds!
+          turn your sound into something extraordinary in seconds.
         </p>
         <button
           className="p-4 mt-8 bg-primary-headerText rounded text-primary-headerBG text-lg md:text-2xl font-semibold hover:text-primary-bodyText"

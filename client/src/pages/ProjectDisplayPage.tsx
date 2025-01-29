@@ -110,11 +110,11 @@ const ProjectDisplayPage = () => {
   return (
     <div className="flex flex-col items-center p-6 bg-primary min-h-screen text-primary-text">
       {selectedProject ? (
-        <div className="relative p-6 rounded-lg w-full">
+        <div className="relative p-14 rounded-lg w-full bg-primary-headerBG flex flex-col">
           {/* Back to Projects Button */}
           <button
             onClick={() => setSelectedProject(null)}
-            className="flex-col md:absolute top-4 left-4 px-4 py-2 mb-10 bg-primary-headerBG text-s md:text-lg text-white rounded hover:bg-blue-600"
+            className="flex-col md:absolute top-4 left-4 px-4 py-2 mb-10 text-s md:text-lg text-primary-bodyText rounded outline hover:font-semibold hover:outline-primary-bodyText"
           >
             ↶ Back to Projects
           </button>
@@ -125,37 +125,39 @@ const ProjectDisplayPage = () => {
           </h2>
 
           {/* Links */}
-          <div className="flex flex-col items-center gap-4 mt-8">
-            {selectedProject.originalFile && (
-              <a
-                href={selectedProject.originalFile.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block px-6 py-3 bg-blue-100 text-blue-700 rounded-lg shadow hover:bg-blue-200 transition-all text-2xl"
-              >
-                View Original File
-              </a>
-            )}
+          <div className="flex flex-col items-center gap-4 mt-16">
             {selectedProject.manipulatedFile && (
               <a
                 href={selectedProject.manipulatedFile.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block px-6 py-3 bg-green-100 text-green-700 rounded-lg shadow hover:bg-green-200 transition-all text-2xl"
+                className="block px-4 py-2 bg-green-100 text-primary-headerText rounded-lg shadow-lg hover:shadow-green-300 transition-all text-xl hover:bg-green-200 hover:text-primary-text"
               >
                 View Manipulated File
               </a>
             )}
           </div>
 
-          {/* Delete Button */}
-          <div className="mt-8 text-center">
-            <button
-              onClick={() => handleDelete(selectedProject.name)}
-              className="px-6 py-3 mt-10 bg-red-500 text-white rounded-lg hover:bg-red-600 text-xs"
-            >
-              Delete Project
-            </button>
+          <div className="flex flex-col items-center mt-8">
+            {selectedProject.originalFile && (
+              <a
+                href={selectedProject.originalFile.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-4 py-1 bg-blue-100 text-primary-headerText rounded-lg shadow-lg hover:shadow-blue-300 transition-all text-xl hover:bg-blue-200 hover:text-primary-text"
+              >
+                View Original File
+              </a>
+            )}
+            {/* Delete Button */}
+            <div className="">
+              <button
+                onClick={() => handleDelete(selectedProject.name)}
+                className="flex-col md:absolute bottom-2 right-[140px] px-4 py-2 mb-10 text-s bg-red-500 hover:bg text-white rounded outline hover:font-semibold hover:outline-red-700"
+              >
+                Delete Project
+              </button>
+            </div>
           </div>
         </div>
       ) : (

@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      textShadow: {
+        md: "0 2px 4px rgba(0, 0, 0, 0.25)",
+      },
       colors: {
         primary: {
           DEFAULT: "#0e7c86",
