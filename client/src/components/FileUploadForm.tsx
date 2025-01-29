@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AlertModal from "./AlertModal";
 
 const FileUploadForm: React.FC = () => {
@@ -16,7 +16,7 @@ const FileUploadForm: React.FC = () => {
     type: "success" | "error";
   } | null>(null);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const messages = [
@@ -114,7 +114,7 @@ const FileUploadForm: React.FC = () => {
 
   // Handle success modal close
   const handleSuccessClose = () => {
-    history.push("/projects");
+    navigate("/projects");
   };
 
   return (

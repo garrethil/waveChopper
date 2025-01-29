@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
-    "target": "esnext", // Modern JavaScript features
-    "module": "esnext", // ESNext modules for bundlers like Vite or Webpack
-    "lib": ["dom", "esnext"], // Include DOM and modern JavaScript libraries
-    "strict": true, // Enable all strict type-checking options
-    "esModuleInterop": true, // Support CommonJS default imports
-    "skipLibCheck": true, // Skip type checking of declaration files
-    "jsx": "react", // If using React, specify JSX support
-    "outDir": "./dist" // Output directory for compiled files
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["dom", "esnext"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "react-router-dom": ["node_modules/react-router-dom"]
+    },
+    "outDir": "./dist"
   },
-  "include": ["src/**/*", "../server/@types"], // Include all .ts and .tsx files in the src directory
-  "exclude": ["node_modules", "dist"] // Exclude unnecessary directories
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

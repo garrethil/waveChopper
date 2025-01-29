@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  Redirect,
+  Routes,
+  Navigate,
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import UploadPage from "./pages/UploadPage";
@@ -30,12 +30,11 @@ const App: React.FC = () => {
       <div className="font-mono">
         <NavBar onLogout={handleLogout} isLoggedIn={isLoggedIn} />
 
-        <Switch>
+        <Routes>
           {/* Login Route */}
           <Route
             path="/"
-            exact
-            render={() =>
+            element={
               isLoggedIn ? <HomePage /> : <LoginPage onLogin={handleLogin} />
             }
           />
@@ -43,20 +42,18 @@ const App: React.FC = () => {
           {/* Upload Route */}
           <Route
             path="/upload"
-            render={() => (isLoggedIn ? <UploadPage /> : <Redirect to="/" />)}
+            element={isLoggedIn ? <UploadPage /> : <Navigate to="/" />}
           />
 
           {/* Project Display Route */}
           <Route
             path="/projects"
-            render={() =>
-              isLoggedIn ? <ProjectDisplayPage /> : <Redirect to="/" />
-            }
+            element={isLoggedIn ? <ProjectDisplayPage /> : <Navigate to="/" />}
           />
 
           {/* Fallback for undefined routes */}
-          <Redirect to="/" />
-        </Switch>
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
       </div>
     </Router>
   );

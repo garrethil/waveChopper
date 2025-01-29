@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface NavBarProps {
   onLogout: () => void;
@@ -7,11 +7,11 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const navigateTo = (path: string) => {
-    history.push(path);
+    navigate(path);
   };
 
   return (
