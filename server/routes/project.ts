@@ -23,7 +23,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 // AWS S3 configuration
 const s3Client = new S3Client({
   region: process.env.AWS_REGION!,
-  credentials: fromEnv(), // Fixes the credential error
+  credentials: fromEnv(),
 });
 
 router.post(
