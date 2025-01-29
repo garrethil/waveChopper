@@ -71,7 +71,7 @@ const ProjectDisplayPage = () => {
     const token = localStorage.getItem("authToken");
     try {
       const response = await fetch(
-        "http://localhost:8000/api/projects/delete-project",
+        `${BACKEND_URL}api/projects/delete-project`,
         {
           method: "DELETE",
           headers: {
