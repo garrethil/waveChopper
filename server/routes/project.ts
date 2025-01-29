@@ -20,7 +20,7 @@ import { fromEnv } from "@aws-sdk/credential-providers"; // Correctly resolves c
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-// AWS S3 configuration
+// AWS S3 configuration for aws sdk v3
 const s3Client = new S3Client({
   region: process.env.AWS_REGION!,
   credentials: fromEnv(),
