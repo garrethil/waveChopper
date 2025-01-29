@@ -4,17 +4,14 @@
   "description": "",
   "main": "server/app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "develop": "concurrently -n server,client \"npm run server:dev\" \"npm run client:dev\"",
     "install": "cd server && npm install && cd ../client && npm install",
-    "build": "npm run server:build && npm run client:build",
-    "render-build": "npm install && npm run build",
-    "server:start": "node server/dist/app.js",
-    "server:dev": "cd server && npm run dev",
+    "build": "npm run client:build && npm run server:build",
+    "client:build": "cd client && npm install && npm run build",
     "server:build": "cd server && npm run build",
-    "client:start": "cd client && npm run start",
-    "client:dev": "cd client && npm start",
-    "client:build": "cd client && npm run build"
+    "server:start": "node server/dist/app.js",
+    "develop": "concurrently -n server,client \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm start"
   },
   "keywords": [],
   "author": "",
