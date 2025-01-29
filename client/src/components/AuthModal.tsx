@@ -14,12 +14,12 @@ const AuthModal: React.FC<AuthModalProps> = ({
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const handleAuth = async (event: React.FormEvent) => {
     event.preventDefault();
     const endpoint = isLogin
-      ? "http://localhost:8000/api/auth/login"
-      : "http://localhost:8000/api/auth/register";
+      ? `${API_BASE_URL}/auth/login`
+      : `${API_BASE_URL}/auth/register`;
 
     try {
       const response = await fetch(endpoint, {
