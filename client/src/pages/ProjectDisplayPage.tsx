@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+const BACKEND_URL = "https://wave-chopper.herokuapp.com";
 
 // Define types for the API response
 interface Project {
@@ -22,15 +23,12 @@ const ProjectDisplayPage = () => {
           throw new Error("Authentication token is missing.");
         }
 
-        const response = await fetch(
-          "http://localhost:8000/api/projects/user-files",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${BACKEND_URL}/api/projects/user-files`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch projects");

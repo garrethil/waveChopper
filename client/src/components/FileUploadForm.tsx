@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "./AlertModal";
+const BACKEND_URL = "https://wave-chopper.herokuapp.com";
 
 const FileUploadForm: React.FC = () => {
   // States for file form fields and alerts
@@ -83,14 +84,11 @@ const FileUploadForm: React.FC = () => {
 
     setIsUploading(true);
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/projects/upload",
-        {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        }
-      );
+      const response = await fetch(`${BACKEND_URL}/api/projects/upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error("Failed to upload file.");
