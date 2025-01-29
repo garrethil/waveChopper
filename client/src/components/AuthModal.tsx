@@ -14,12 +14,12 @@ const AuthModal: React.FC<AuthModalProps> = ({
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const API_BASE_URL = "https://wave-chopper-2dc5d4458dd7.herokuapp.com";
+  const API_BASE_URL = "https://wave-chopper-2dc5d4458dd7.herokuapp.com/";
   const handleAuth = async (event: React.FormEvent) => {
     event.preventDefault();
     const endpoint = isLogin
-      ? `${API_BASE_URL}/auth/login`
-      : `${API_BASE_URL}/auth/register`;
+      ? `${API_BASE_URL}api/auth/login`
+      : `${API_BASE_URL}api/auth/register`;
 
     try {
       const response = await fetch(endpoint, {
