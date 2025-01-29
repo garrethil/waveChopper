@@ -1,10 +1,15 @@
 import cors from "cors";
 import express, { Application } from "express";
 
+// Allow requests only from your deployed frontend
+const allowedOrigins = [
+  "https://wave-chopper-2dc5d4458dd7.herokuapp.com", // Frontend URL
+];
+
 export const registerMiddleware = (app: Application) => {
   app.use(
     cors({
-      origin: process.env.FRONTEND_URL || "http://localhost:5173",
+      origin: allowedOrigins, // Allow requests from your frontend only
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"],
