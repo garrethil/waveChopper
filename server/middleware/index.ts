@@ -10,10 +10,11 @@ const allowedOrigins = [
 export const registerMiddleware = (app: Application) => {
   app.use(
     cors({
-      origin: allowedOrigins, // Allow requests from your frontend only
+      origin: allowedOrigins,
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"],
+      preflightContinue: false, // Pass the CORS preflight response to the next handler
     })
   );
   app.use(express.json());
