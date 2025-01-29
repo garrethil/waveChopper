@@ -1,6 +1,13 @@
 import express from "express";
 import multer from "multer";
-import AWS from "aws-sdk";
+import {
+  S3Client,
+  PutObjectCommand,
+  ListObjectsV2Command,
+  DeleteObjectsCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { authenticateToken } from "../middleware/authenticateToken";
 import {
   decodeAudio,
@@ -8,16 +15,15 @@ import {
   jumbleAudio,
   encodeAudio,
 } from "../utils/audioUtils";
+import { fromEnv } from "@aws-sdk/credential-providers"; // Correctly resolves credentials
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
 // AWS S3 configuration
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+const s3Client = new S3Client({
   region: process.env.AWS_REGION!,
-  signatureVersion: "v4",
+  credentials: fromEnv(), // Fixes the credential error
 });
 
 router.post(
@@ -63,14 +69,14 @@ router.post(
       const originalFileKey = `${user.id}/${projectName}/${Date.now()}-${
         file.originalname
       }`;
-      await s3
-        .upload({
+      await s3Client.send(
+        new PutObjectCommand({
           Bucket: process.env.S3_BUCKET_NAME!,
           Key: originalFileKey,
           Body: file.buffer,
           ContentType: file.mimetype,
         })
-        .promise();
+      );
 
       // Upload manipulated file with manipulation type in the key
       const manipulatedFileKey = `${
@@ -78,14 +84,14 @@ router.post(
       }/${projectName}/manipulated-${manipulationType}-${Date.now()}-${
         file.originalname
       }`;
-      await s3
-        .upload({
+      await s3Client.send(
+        new PutObjectCommand({
           Bucket: process.env.S3_BUCKET_NAME!,
           Key: manipulatedFileKey,
           Body: encodedAudioBuffer,
           ContentType: "audio/wav",
         })
-        .promise();
+      );
 
       return res.status(200).json({
         message: "Files uploaded successfully.",
@@ -112,12 +118,12 @@ router.get("/user-files", authenticateToken, async (req, res) => {
   }
 
   try {
-    const params: AWS.S3.ListObjectsV2Request = {
+    const params = {
       Bucket: process.env.S3_BUCKET_NAME!,
       Prefix: `${user.id}/`, // User-specific folder
     };
 
-    const data = await s3.listObjectsV2(params).promise();
+    const data = await s3Client.send(new ListObjectsV2Command(params));
 
     if (!data.Contents || data.Contents.length === 0) {
       return res.status(200).json({ success: true, projects: [] });
@@ -137,13 +143,14 @@ router.get("/user-files", authenticateToken, async (req, res) => {
         groupedProjects[projectName] = {};
       }
 
-      // Generate a signed URL for each file
-      const signedUrl = s3.getSignedUrl("getObject", {
-        Bucket: process.env.S3_BUCKET_NAME!,
-        Key: file.Key!,
-        Expires: 3600, // URL valid for 1 hour
-      });
-
+      const signedUrl = await getSignedUrl(
+        s3Client,
+        new GetObjectCommand({
+          Bucket: process.env.S3_BUCKET_NAME!,
+          Key: file.Key!,
+        }),
+        { expiresIn: 3600 }
+      );
       if (file.Key!.includes("manipulated")) {
         groupedProjects[projectName].manipulatedFile = {
           key: file.Key,
@@ -182,19 +189,19 @@ router.delete("/delete-project", authenticateToken, async (req, res) => {
 
   try {
     // List all files in the project folder
-    const listParams: AWS.S3.ListObjectsV2Request = {
+    const listParams = {
       Bucket: process.env.S3_BUCKET_NAME!,
       Prefix: `${user.id}/${projectName}/`,
     };
 
-    const listData = await s3.listObjectsV2(listParams).promise();
+    const listData = await s3Client.send(new ListObjectsV2Command(listParams));
 
     if (!listData.Contents || listData.Contents.length === 0) {
       return res.status(404).json({ error: "Project not found." });
     }
 
     // Create delete parameters
-    const deleteParams: AWS.S3.DeleteObjectsRequest = {
+    const deleteParams = {
       Bucket: process.env.S3_BUCKET_NAME!,
       Delete: {
         Objects: listData.Contents.map((item) => ({ Key: item.Key! })),
@@ -202,7 +209,7 @@ router.delete("/delete-project", authenticateToken, async (req, res) => {
     };
 
     // Delete the files
-    await s3.deleteObjects(deleteParams).promise();
+    await s3Client.send(new DeleteObjectsCommand(deleteParams));
 
     return res.status(200).json({ message: "Project deleted successfully." });
   } catch (error) {
