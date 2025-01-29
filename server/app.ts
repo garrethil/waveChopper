@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import path from "path";
 import { registerMiddleware } from "./middleware";
 import { registerRoutes } from "./routes";
 
@@ -13,7 +14,16 @@ const PORT: number = parseInt(process.env.PORT || "8000", 10);
 
 // Middleware
 registerMiddleware(app);
+
+// API Routes
 registerRoutes(app);
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
 
 // Connect to MongoDB and Start Server
 app.listen(PORT, async () => {
