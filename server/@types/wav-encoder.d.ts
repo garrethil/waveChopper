@@ -4,5 +4,5 @@ declare module "wav-encoder" {
     channelData: Float32Array[]; // Array of audio channels (e.g., [left, right] for stereo)
   }
 
-  export function encode(options: EncodeOptions): Promise<Uint8Array>; // Asynchronous encoding
+  export function encode(options: EncodeOptions): Promise<Uint8Array>;
 }
