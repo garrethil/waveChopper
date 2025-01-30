@@ -62,7 +62,7 @@ WaveChopper is an interactive audio manipulation tool that enables users to uplo
 
 ## Built With
 
-[![My Skills](https://skillicons.dev/icons?i=nodejs,express,mongodb,react,typescript,jwt,tailwind)](#)
+[![My Skills](https://skillicons.dev/icons?i=nodejs,express,mongodb,react,typescript,tailwind,aws)](#)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
