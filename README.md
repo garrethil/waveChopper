@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/yourusername/wavechopper">
-    <img src="/wave-yellow.svg" alt="WaveChopper Logo" width="100">
+    <img src="./client/public/wave-yellow.svg" alt="WaveChopper Logo" width="100">
   </a>
 
 <h3 align="center">WaveChopper</h3>
@@ -18,6 +18,9 @@
     <a href="https://github.com/yourusername/wavechopper/issues">Report Bug</a>
     ·
     <a href="https://github.com/yourusername/wavechopper/issues">Request Feature</a>
+        <br />
+    <a href="https://wave-chopper-2dc5d4458dd7.herokuapp.com/">Deployed App</a>
+
   </p>
 </div>
 
@@ -35,10 +38,7 @@
       </ul>
     </li>
     <li><a href="#architecture">Architecture</a></li>
-    <li><a href="#authentication-and-security">Authentication & Security</a></li>
-    <li><a href="#installation">Installation</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -77,3 +77,8 @@ WaveChopper follows a **MERN stack architecture**, utilizing both client-side an
 3. **Audio Processing Engine** – Implements custom logic to manipulate `.wav` file byte structures before serving them back to users.
 
 <p align="right">
+
+## Contact
+
+- Garret Hildebrandt - [@github](https://github.com/garrethil) - garrethildebrandt@gmail.com
+
