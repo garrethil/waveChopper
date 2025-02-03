@@ -12,7 +12,7 @@
     A full-stack audio manipulation application that allows users to upload, reorder, and transform WAV files.
     <br />
     <br />
-    <a target="_blank" href="https://youtu.be/YhW8FviKwfk"><strong>Watch the Demo »</strong></a>
+    <a target="_blank" href="https://youtu.be/j3HWg1l8v-o"><strong>Watch the Demo »</strong></a>
     <br />
     <br />
     <a href="https://github.com/yourusername/wavechopper/issues">Report Bug</a>
