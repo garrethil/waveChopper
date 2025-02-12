@@ -110,7 +110,6 @@ const FileUploadForm: React.FC = () => {
     }
   };
 
-  // Handle success modal close
   const handleSuccessClose = () => {
     navigate("/projects");
   };

@@ -15,7 +15,7 @@ import {
   jumbleAudio,
   encodeAudio,
 } from "../utils/audioUtils";
-import { fromEnv } from "@aws-sdk/credential-providers"; // Correctly resolves credentials
+import { fromEnv } from "@aws-sdk/credential-providers";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -34,7 +34,7 @@ router.post(
     const user = req.user;
     const file = req.file;
     const projectName = req.body.projectName;
-    const manipulationType = req.body.manipulationType; // Specify the type of manipulation: "reverse" or "jumble"
+    const manipulationType = req.body.manipulationType;
 
     if (!user?.id || !file || !projectName || !manipulationType) {
       return res.status(400).json({
@@ -120,7 +120,7 @@ router.get("/user-files", authenticateToken, async (req, res) => {
   try {
     const params = {
       Bucket: process.env.S3_BUCKET_NAME!,
-      Prefix: `${user.id}/`, // User-specific folder
+      Prefix: `${user.id}/`,
     };
 
     const data = await s3Client.send(new ListObjectsV2Command(params));
@@ -137,7 +137,7 @@ router.get("/user-files", authenticateToken, async (req, res) => {
 
     for (const file of data.Contents) {
       const parts = file.Key!.split("/");
-      const projectName = parts[1]; // Assuming structure: userID/projectName/fileName
+      const projectName = parts[1];
 
       if (!groupedProjects[projectName]) {
         groupedProjects[projectName] = {};

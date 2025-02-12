@@ -6,11 +6,7 @@ interface AuthModalProps {
   onAuthSuccess: (message: string, type: "success" | "error") => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({
-  onClose,
-  // onLogin,
-  onAuthSuccess,
-}) => {
+const AuthModal: React.FC<AuthModalProps> = ({ onClose, onAuthSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

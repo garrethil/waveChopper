@@ -30,7 +30,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
           <h1 className="text-3xl font-bold">Wave-Chopper</h1>
         </button>
 
-        {/* Hamburger Menu for Small Screens (only when logged in) */}
+        {/* Nav Menu button for Small Screens */}
         {isLoggedIn && (
           <div className="block md:hidden">
             <button
@@ -55,7 +55,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, isLoggedIn }) => {
           </div>
         )}
 
-        {/* Desktop Menu */}
+        {/* Desktop Nav Menu */}
         {isLoggedIn && (
           <div className="hidden md:flex space-x-4">
             <button

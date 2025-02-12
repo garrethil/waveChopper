@@ -6,6 +6,8 @@ interface LoginPageProps {
   onLogin: () => void;
 }
 
+//landing page for non-loggedin users
+
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [modalState, setModalState] = useState<{
     type: "login" | "alert" | null;
