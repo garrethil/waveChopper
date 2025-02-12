@@ -18,7 +18,7 @@ registerMiddleware(app);
 // API Routes
 registerRoutes(app);
 
-const frontendPath = path.join(__dirname, "../../client/dist");
+const frontendPath = path.join(__dirname, "../client/dist");
 
 app.use(express.static(frontendPath));
 

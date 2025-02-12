@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "./AlertModal";
-const API_BASE_URL = "https://wave-chopper-2dc5d4458dd7.herokuapp.com/";
+const API_BASE_URL = "http://18.224.38.14:8000/";
 
 const FileUploadForm: React.FC = () => {
-  // States for file form fields and alerts
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [projectName, setProjectName] = useState<string>("");
   const [manipulationType, setManipulationType] = useState<string>("reverse");

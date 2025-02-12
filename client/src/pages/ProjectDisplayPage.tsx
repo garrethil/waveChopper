@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-const BACKEND_URL = "https://wave-chopper-2dc5d4458dd7.herokuapp.com/";
+const BACKEND_URL = "http://18.224.38.14:8000/";
 
 // Define types for the API response
 interface Project {

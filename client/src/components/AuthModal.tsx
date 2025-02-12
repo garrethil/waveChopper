@@ -6,15 +6,11 @@ interface AuthModalProps {
   onAuthSuccess: (message: string, type: "success" | "error") => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({
-  onClose,
-  // onLogin,
-  onAuthSuccess,
-}) => {
+const AuthModal: React.FC<AuthModalProps> = ({ onClose, onAuthSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const API_BASE_URL = "https://wave-chopper-2dc5d4458dd7.herokuapp.com/";
+  const API_BASE_URL = "http://18.224.38.14:8000/";
   const handleAuth = async (event: React.FormEvent) => {
     event.preventDefault();
     const endpoint = isLogin
